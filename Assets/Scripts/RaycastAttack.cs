@@ -43,11 +43,11 @@ public class RaycastAttack : NetworkBehaviour {
             if (Runner.GetPhysicsScene().Raycast(ray.origin, ray.direction * shootDistance, out var hit)) {
                 GameObject hitObject = hit.transform.gameObject;
                 Debug.Log("Raycast hit: name="+ hitObject.name+" tag="+hitObject.tag+" collider="+hit.collider);
-                if (hitObject.TryGetComponent<Health>(out var health)) {
+                if (hitObject.TryGetComponent<HealthAndScore>(out var healthAndScore)) {
                     Debug.Log("Dealing damage");
-                    health.DealDamageRpc(Damage);
-                    if(!health.hasShield){
-                    AddScoreRpc(scoreToAdd);
+                    healthAndScore.DealDamageRpc(Damage);
+                    if(!healthAndScore.hasShield){
+                        AddScoreRpc(scoreToAdd);
                     }
                 }
             }
@@ -57,7 +57,7 @@ public class RaycastAttack : NetworkBehaviour {
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void AddScoreRpc(int scoreToAdd)
     {
-        var player = GetComponent<Health>();
+        var player = GetComponent<HealthAndScore>();
         player.AddScoreRpc(scoreToAdd);
     }
 

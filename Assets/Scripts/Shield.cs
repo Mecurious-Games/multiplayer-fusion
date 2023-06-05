@@ -8,7 +8,7 @@ public class Shield : MonoBehaviour
     {
         if (isCollected) return; // Shield already collected
 
-        var player = other.GetComponent<Health>();
+        var player = other.GetComponent<HealthAndScore>();
         if (player != null)
         {
             player.CollectShield();

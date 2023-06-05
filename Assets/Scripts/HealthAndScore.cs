@@ -2,7 +2,7 @@ using Fusion;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Health : NetworkBehaviour
+public class HealthAndScore : NetworkBehaviour
 {
     [SerializeField] NumberField HealthDisplay;
     [SerializeField] NumberField ScoreDisplay;
@@ -14,13 +14,13 @@ public class Health : NetworkBehaviour
     [Networked(OnChanged = nameof(NetworkedScoreChanged))]
     public int NetworkedScore { get; set; } = 0;
 
-    private static void NetworkedHealthChanged(Changed<Health> changed)
+    private static void NetworkedHealthChanged(Changed<HealthAndScore> changed)
     {
         Debug.Log($"Health changed to: {changed.Behaviour.NetworkedHealth}");
         changed.Behaviour.HealthDisplay.SetNumber(changed.Behaviour.NetworkedHealth);
     }
 
-    private static void NetworkedScoreChanged(Changed<Health> changed)
+    private static void NetworkedScoreChanged(Changed<HealthAndScore> changed)
     {
         Debug.Log($"Score changed to: {changed.Behaviour.NetworkedScore}");
         changed.Behaviour.ScoreDisplay.SetNumber(changed.Behaviour.NetworkedScore);
