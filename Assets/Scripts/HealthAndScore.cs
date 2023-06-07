@@ -1,6 +1,7 @@
 using Fusion;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class HealthAndScore : NetworkBehaviour
 {
@@ -18,6 +19,22 @@ public class HealthAndScore : NetworkBehaviour
     {
         Debug.Log($"Health changed to: {changed.Behaviour.NetworkedHealth}");
         changed.Behaviour.HealthDisplay.SetNumber(changed.Behaviour.NetworkedHealth);
+
+      
+        if (changed.Behaviour.NetworkedHealth <= 0)
+        {
+            // Player health reached 0, move only the player to the GameOverScene
+            if (changed.Behaviour.HasStateAuthority)
+            {
+                // Player with state authority loads the GameOverScene
+                SceneManager.LoadScene("GameOverScene");
+            }
+            else
+            {
+                // Other players watch the player disappear
+                changed.Behaviour.gameObject.SetActive(false);
+            }
+        }
     }
 
     private static void NetworkedScoreChanged(Changed<HealthAndScore> changed)
