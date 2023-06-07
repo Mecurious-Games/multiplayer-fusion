@@ -5,8 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class HealthAndScore : NetworkBehaviour
 {
-    [SerializeField] NumberField HealthDisplay;
-    [SerializeField] NumberField ScoreDisplay;
+    // [SerializeField] NumberField HealthDisplay;
+    // [SerializeField] NumberField ScoreDisplay;
+    [SerializeField] TMPro.TextMeshProUGUI HealthText;
+    [SerializeField] TMPro.TextMeshProUGUI ScoreText;
     public bool hasShield = false;
 
     [Networked(OnChanged = nameof(NetworkedHealthChanged))]
@@ -18,29 +20,13 @@ public class HealthAndScore : NetworkBehaviour
     private static void NetworkedHealthChanged(Changed<HealthAndScore> changed)
     {
         Debug.Log($"Health changed to: {changed.Behaviour.NetworkedHealth}");
-        changed.Behaviour.HealthDisplay.SetNumber(changed.Behaviour.NetworkedHealth);
-
-      
-        if (changed.Behaviour.NetworkedHealth <= 0)
-        {
-            // Player health reached 0, move only the player to the GameOverScene
-            if (changed.Behaviour.HasStateAuthority)
-            {
-                // Player with state authority loads the GameOverScene
-                SceneManager.LoadScene("GameOverScene");
-            }
-            else
-            {
-                // Other players watch the player disappear
-                changed.Behaviour.gameObject.SetActive(false);
-            }
-        }
+        // changed.Behaviour.HealthDisplay.SetNumber(changed.Behaviour.NetworkedHealth);
     }
 
     private static void NetworkedScoreChanged(Changed<HealthAndScore> changed)
     {
         Debug.Log($"Score changed to: {changed.Behaviour.NetworkedScore}");
-        changed.Behaviour.ScoreDisplay.SetNumber(changed.Behaviour.NetworkedScore);
+        // changed.Behaviour.ScoreDisplay.SetNumber(changed.Behaviour.NetworkedScore);
     }
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
@@ -49,16 +35,39 @@ public class HealthAndScore : NetworkBehaviour
         if (hasShield) return; // Player has a shield, ignore the damage
 
         NetworkedHealth -= damage;
+        if (NetworkedHealth <= 0)
+        {
+            // end game
+            Debug.Log("Game Over");
+            SceneManager.LoadScene("GameOverScene");
+        }
+        HealthText.text = "Health : " + NetworkedHealth.ToString();
     }
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void AddScoreRpc(int score)
     {
         NetworkedScore += score;
+        ScoreText.text = "Score : " + NetworkedScore.ToString();
     }
 
     public void CollectShield()
     {
         hasShield = true;
+    }
+
+    public override void Spawned()
+    {
+        HealthText = GameObject.Find("HealthText").GetComponent<TMPro.TextMeshProUGUI>();
+        ScoreText = GameObject.Find("ScoreText").GetComponent<TMPro.TextMeshProUGUI>();
+        if (HealthText == null || ScoreText == null)
+        {
+            Debug.LogError("HealthText or ScoreText not found");
+        }
+        else
+        {
+            ScoreText.text = "Score : " + NetworkedScore.ToString();
+            HealthText.text = "Health : " + NetworkedHealth.ToString();
+        }
     }
 }

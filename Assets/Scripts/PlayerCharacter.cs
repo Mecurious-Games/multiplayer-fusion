@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerCharacter : NetworkBehaviour {
 
     [SerializeField] float offsetSize = 3f;
-    public Camera playerCamera;
+    private Camera playerCamera;
 
     public override void Spawned()  {  // Use instead of Start/Awake for NetworkObjects
         /* Move to a random location around the current location */
