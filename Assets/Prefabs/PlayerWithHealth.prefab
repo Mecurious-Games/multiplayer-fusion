@@ -414,6 +414,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   offsetSize: 3
+  playerCamera: {fileID: 0}
 --- !u!114 &-5114905693531459854
 MonoBehaviour:
   m_ObjectHideFlags: 0
