@@ -227,7 +227,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3131791806272709968}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 4300000, guid: 56dd4edec19a3b04195448769c085dfc, type: 3}
 --- !u!23 &3131791806272709969
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -248,7 +248,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: b3ad386aba28716448079dcf67d7aede, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -543,7 +543,6 @@ MonoBehaviour:
   _interpolationDataSource: 0
   HealthDisplay: {fileID: 1642197880}
   ScoreDisplay: {fileID: 5102560463969070869}
-  shieldVisual: {fileID: 0}
   hasShield: 0
   _NetworkedHealth: 100
   _NetworkedScore: 0
