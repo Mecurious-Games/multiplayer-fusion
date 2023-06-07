@@ -27,11 +27,12 @@ public class RaycastAttack : NetworkBehaviour {
             attackLocation.AddBinding("<Mouse>/position");
     }
 
+    void Update()
+    {
+        if (!HasStateAuthority) return;
 
-    void Update() {
-        if (!HasStateAuthority)  return;
-
-        if (attack.WasPerformedThisFrame()) {
+        if (attack.WasPerformedThisFrame())
+        {
             Vector2 attackLocationInScreenCoordinates = attackLocation.ReadValue<Vector2>();
 
             var camera = Camera.main;
@@ -40,19 +41,25 @@ public class RaycastAttack : NetworkBehaviour {
 
             Debug.DrawRay(ray.origin, ray.direction * shootDistance, Color.red, duration: 1f);
 
-            if (Runner.GetPhysicsScene().Raycast(ray.origin, ray.direction * shootDistance, out var hit)) {
+            if (Runner.GetPhysicsScene().Raycast(ray.origin, ray.direction * shootDistance, out var hit))
+            {
                 GameObject hitObject = hit.transform.gameObject;
-                Debug.Log("Raycast hit: name="+ hitObject.name+" tag="+hitObject.tag+" collider="+hit.collider);
-                if (hitObject.TryGetComponent<HealthAndScore>(out var healthAndScore)) {
+                Debug.Log("Raycast hit: name=" + hitObject.name + " tag=" + hitObject.tag + " collider=" + hit.collider);
+
+                var player = hitObject.GetComponent<HealthAndScore>();
+                if (player != null && player != this.GetComponent<HealthAndScore>())
+                {
                     Debug.Log("Dealing damage");
-                    healthAndScore.DealDamageRpc(Damage);
-                    if(!healthAndScore.hasShield){
+                    player.DealDamageRpc(Damage);
+                    if (!player.hasShield)
+                    {
                         AddScoreRpc(scoreToAdd);
                     }
                 }
             }
         }
     }
+
     
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void AddScoreRpc(int scoreToAdd)
