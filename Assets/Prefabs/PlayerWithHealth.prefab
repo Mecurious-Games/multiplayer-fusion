@@ -414,6 +414,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   offsetSize: 3
+  playerCamera: {fileID: 0}
 --- !u!114 &-5114905693531459854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -543,7 +544,6 @@ MonoBehaviour:
   _interpolationDataSource: 0
   HealthDisplay: {fileID: 1642197880}
   ScoreDisplay: {fileID: 5102560463969070869}
-  shieldVisual: {fileID: 0}
   hasShield: 0
   _NetworkedHealth: 100
   _NetworkedScore: 0
